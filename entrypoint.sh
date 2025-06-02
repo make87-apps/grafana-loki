@@ -1,13 +1,13 @@
 #!/bin/sh
 set -e
 
-mkdir -p /etc/loki
-: > /etc/loki/loki.yaml  # clear or create config
+mkdir -p /loki
+: > /loki/loki.yaml  # clear or create config
 
 config=$(echo "$MAKE87_CONFIG" | jq -c '.config')
 
 # Top-level defaults
-cat <<EOF >> /etc/loki/loki.yaml
+cat <<EOF >> /loki/loki.yaml
 auth_enabled: false
 
 server:
@@ -44,5 +44,5 @@ limits_config:
   max_entries_limit_per_query: $(echo "$config" | jq -r '.max_entries_limit_per_query // 5000')
 EOF
 
-exec loki -config.file=/etc/loki/loki.yaml
+exec loki -config.file=/loki/loki.yaml
 
