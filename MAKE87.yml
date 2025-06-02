@@ -1,6 +1,45 @@
-build_kit:
-  name: python3
-  version: latest
-outbound_topics:
-  - name: HELLO_WORLD_MESSAGE
-    message_type: make87_messages.text.text_plain.PlainText
+version: 1
+build:
+  custom:
+    dockerfile: Dockerfile
+    platforms: [linux/amd64, linux/arm64]
+
+interfaces:
+  - name: loki-http
+    protocol: http
+    default_port:
+      name: loki-http
+      protocol: TCP
+      target_port: 3100
+    servers:
+      - name: loki
+        spec:
+          string: loki
+
+container_config:
+  volumes:
+    - "./loki-data:/loki"
+
+config:
+  type: object
+  properties:
+    retention_period:
+      type: string
+      default: "7d"
+      description: "How long logs should be retained (e.g., 7d, 30d)."
+    max_entries_limit_per_query:
+      type: integer
+      default: 5000
+      description: "Maximum number of log entries returned per query."
+    chunk_idle_period:
+      type: string
+      default: "5m"
+      description: "Idle period before flushing chunks to storage."
+    object_store:
+      type: string
+      enum: [ filesystem, s3, gcs, azure ]
+      default: filesystem
+    storage_path:
+      type: string
+      default: "/loki"
+      description: "Base path for local storage (used if object_store=filesystem)."
