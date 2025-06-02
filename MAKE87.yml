@@ -18,7 +18,7 @@ interfaces:
 
 container_config:
   volumes:
-    - "./loki-data:/loki"
+    - "~/loki-data:/loki"
 
 config:
   type: object
