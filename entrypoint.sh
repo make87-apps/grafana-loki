@@ -52,4 +52,4 @@ compactor:
 EOF
 
 # Start Loki with the generated config
-exec loki -config.file=/tmp/loki/loki.yaml
+exec loki -config.file=/tmp/loki/loki.yaml -target=all
