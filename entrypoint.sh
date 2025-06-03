@@ -22,6 +22,7 @@ ingester:
     ring:
       kvstore:
         store: inmemory
+      replication_factor: 1  # ← ADD THIS LINE
   chunk_idle_period: $(echo "$config" | jq -r '.chunk_idle_period // "5m"')
 
 schema_config:
